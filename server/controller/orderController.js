@@ -66,7 +66,7 @@ export const placeOrderStripe = async (req, res) => {
           product_data: {
             name: item.name,
           },
-          unit_amount: Math.floor(item.price + item.price * 0.02) * 10,
+          unit_amount: Math.floor(item.price + item.price * 0.02) * 100,
         },
         quantity: item.quantity,
       };
@@ -93,7 +93,7 @@ export const placeOrderStripe = async (req, res) => {
 export const stripWebhooks = async (req, res) => {
   console.log("req: ", req.body);
   const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
-  const sig = req.headers["strip-signature"];
+  const sig = req.headers["stripe-signature"];
   let event;
   try {
     event = stripeInstance.webhooks.constructEvent(
