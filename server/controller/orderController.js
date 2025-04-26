@@ -119,7 +119,7 @@ export const stripWebhooks = async (req, res) => {
       await User.findByIdAndUpdate(userId, { cartItems: {} });
       break;
     }
-    case "payment_intent.failed": {
+    case "payment_intent.payment_failed": {
       const paymentIntent = event.data.object;
       const paymentIntentId = paymentIntent.id;
       const session = await stripeInstance.checkout.sessions.list({
