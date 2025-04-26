@@ -83,6 +83,8 @@ export const placeOrderStripe = async (req, res) => {
       },
       billing_address_collection: "auto",
     });
+    console.log({ session });
+
     return res.json({ success: true, url: session.url });
   } catch (error) {
     console.log("error: ", error.message);
@@ -92,6 +94,7 @@ export const placeOrderStripe = async (req, res) => {
 
 export const stripWebhooks = async (req, res) => {
   console.log("req: ", req.body);
+  console.log("asdsda");
   const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
   const sig = req.headers["stripe-signature"];
   let event;
@@ -111,8 +114,9 @@ export const stripWebhooks = async (req, res) => {
         payment_intent: paymentIntentId,
       });
       console.log({ session });
+      console.log("asdsda");
 
-      const { orderId, userId } = session.data[0].metadata;
+      const { orderId, userId } = session.metadata;
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       await User.findByIdAndUpdate(userId, { cartItems: {} });
       break;
