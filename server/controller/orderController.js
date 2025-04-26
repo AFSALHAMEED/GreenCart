@@ -110,6 +110,8 @@ export const stripWebhooks = async (req, res) => {
       const session = await stripeInstance.checkout.sessions.list({
         payment_intent: paymentIntentId,
       });
+      console.log({ session });
+
       const { orderId, userId } = session.data[0].metadata;
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       await User.findByIdAndUpdate(userId, { cartItems: {} });
