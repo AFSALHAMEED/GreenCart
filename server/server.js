@@ -22,7 +22,6 @@ const allowedOrigin = ["http://localhost:5173"];
 await connectDB();
 await connectCloudinary();
 
-app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 
@@ -31,6 +30,7 @@ app.post(
   bodyParser.raw({ type: "application/json" }),
   stripWebhooks
 );
+app.use(express.json());
 
 app.get("/", (req, res) => res.send("APi is working "));
 
