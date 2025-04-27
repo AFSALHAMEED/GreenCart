@@ -11,6 +11,7 @@ import cartRouter from "./routes/cartRouter.js";
 import addressRouter from "./routes/addressRouter.js";
 import orderRouter from "./routes/orderRoute.js";
 import { stripWebhooks } from "./controller/orderController.js";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -25,7 +26,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 
-app.post("/stripe", express.raw({ type: "application/json" }), stripWebhooks);
+app.post(
+  "/stripe",
+  bodyParser.raw({ type: "application/json" }),
+  stripWebhooks
+);
 
 app.get("/", (req, res) => res.send("APi is working "));
 
