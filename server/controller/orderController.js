@@ -119,7 +119,7 @@ export const stripWebhooks = async (req, res) => {
         payment_intent: paymentIntentId,
       });
       console.log({ session });
-
+      console.log(JSON.stringify(session, null, 2));
       const { orderId, userId } = session.metadata;
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       await User.findByIdAndUpdate(userId, { cartItems: {} });
