@@ -120,7 +120,7 @@ export const stripWebhooks = async (req, res) => {
       });
       console.log({ session });
       console.log(JSON.stringify(session, null, 2));
-      const { orderId, userId } = session.metadata;
+      const { orderId, userId } = session.data[0].metadata;
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       await User.findByIdAndUpdate(userId, { cartItems: {} });
       break;
