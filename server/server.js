@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(cors({ origin: allowedOrigin, credentials: true }));
 
 app.post(
-  "/stripe",
+  "/stripe/webhook",
   bodyParser.raw({ type: "application/json" }),
   stripWebhooks
 );
