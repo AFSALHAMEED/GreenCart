@@ -17,7 +17,10 @@ const app = express();
 
 const port = process.env.PORT || 4000;
 
-const allowedOrigin = ["http://localhost:5173"];
+const allowedOrigin = [
+  "http://localhost:5173",
+  "https://green-cart-delta.vercel.app",
+];
 
 await connectDB();
 await connectCloudinary();

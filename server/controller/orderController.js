@@ -58,6 +58,7 @@ export const placeOrderStripe = async (req, res) => {
       amount,
       paymentType: "Online",
     });
+
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
     const line_items = productData.map((item) => {
       return {
@@ -92,8 +93,6 @@ export const placeOrderStripe = async (req, res) => {
 };
 
 export const stripWebhooks = async (req, res) => {
-  console.log("req: ", req.body);
-
   const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
   const sig = req.headers["stripe-signature"];
   let event;
@@ -107,9 +106,6 @@ export const stripWebhooks = async (req, res) => {
     console.log("error: ", error);
     res.status(400).send(`webhook error:${error.message}`);
   }
-  console.log(event.data.object);
-  console.log({ event: event });
-  console.log(JSON.stringify(event, null, 2));
 
   switch (event.type) {
     case "payment_intent.succeeded": {
@@ -118,8 +114,6 @@ export const stripWebhooks = async (req, res) => {
       const session = await stripeInstance.checkout.sessions.list({
         payment_intent: paymentIntentId,
       });
-      console.log({ session });
-      console.log(JSON.stringify(session, null, 2));
       const { orderId, userId } = session.data[0].metadata;
       await Order.findByIdAndUpdate(orderId, { isPaid: true });
       await User.findByIdAndUpdate(userId, { cartItems: {} });
@@ -148,7 +142,10 @@ export const getOrder = async (req, res) => {
     const { userId } = req.user;
     const orders = await Order.find({
       userId,
-      $or: [{ paymentType: "COD", isPaid: false }],
+      $or: [
+        { paymentType: "COD", isPaid: false },
+        { paymentType: "Online", isPaid: true },
+      ],
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
@@ -160,7 +157,6 @@ export const getOrder = async (req, res) => {
 };
 
 export const getAllOrder = async (req, res) => {
-  console.log("req: ", req);
   try {
     const orders = await Order.find({
       $or: [{ paymentType: "COD", isPaid: false }],
