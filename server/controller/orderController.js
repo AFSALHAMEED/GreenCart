@@ -107,7 +107,9 @@ export const stripWebhooks = async (req, res) => {
     console.log("error: ", error);
     res.status(400).send(`webhook error:${error.message}`);
   }
+  console.log(event.data.object);
   console.log({ event: event });
+  console.log(JSON.stringify(event, null, 2));
 
   switch (event.type) {
     case "payment_intent.succeeded": {
