@@ -39,12 +39,12 @@ export const register = async (req, res) => {
       state,
     });
     const token = jwt.sign({ id: user._id }, process.env.JWT_Key, {
-      expiresIn: "7d",
+      expiresIn: "1d",
     });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: false,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return res.json({
