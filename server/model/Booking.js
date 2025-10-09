@@ -74,6 +74,6 @@ bookingSchema.pre("save", function (next) {
 });
 
 const Booking =
-  mongoose.models.booking || mongoose.model("Booking", bookingSchema);
+  mongoose.models.booking || mongoose.model("booking", bookingSchema);
 
 export default Booking;
